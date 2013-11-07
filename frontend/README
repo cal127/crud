@@ -1,0 +1,19 @@
+## Frontend dependencies
+
+jQuery
+Handlebars
+
+## Setup
+
+Include crud.js, crud.css, tpl.js + jquery + handlebars
+
+Call CRUD jquery helper method on the element you want to CRUDify.
+Note that the target element has to have the meta information in json format
+in its 'data' attribute. Passing that information is the job of the backend of
+this package.
+
+<code>
+    $(function() {
+        $('#crud').CRUD();
+    });
+</code>

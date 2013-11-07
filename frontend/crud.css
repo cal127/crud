@@ -1,0 +1,191 @@
+/* generic */
+.crud .clear { clear: both; }
+
+.crud input.delete {
+    display: block;
+    margin: auto;
+    width: 25px;
+    height: 25px;
+    color: transparent;
+    border: 0;
+    background: url('trash.png') center center;
+}
+.crud *[disabled=disabled] {
+    color: black;
+    border-style: none;
+    background-color: transparent;
+}
+.wmultiple {
+    text-align: left;
+}
+
+/* generic table styles */
+.crud table,
+.popup table {
+    border-collapse: separate;
+    border-spacing: 5px;
+}
+.crud table thead th,
+.popup table thead th {
+    border-radius: 10px 10px 0 0;
+}
+.crud table th,
+.crud table td,
+.popup table th,
+.popup table td {
+    padding: 5px 10px;
+    background-color: #ddd;
+}
+.crud table td.odd,
+.popup table td.odd {
+    background-color: #ddd;
+}
+.crud table th,
+.popup table th {
+    background-color: #eea;
+}
+
+/* styles for settings table */
+.crud .meta,
+.crud .meta table {
+    float: right;
+    width: 300px;
+}
+.crud .meta .filters tbody th {
+    background-color: orange;
+}
+.crud .meta table td {
+    text-align: center;
+}
+
+/* styles for rows table */
+.crud .rows {
+    float: left;
+    width: 600px;
+    font-size: 0.9em;
+}
+.crud .rows thead th {
+    padding: 0;
+}
+.crud .rows thead a {
+    display: block;
+    padding: 5px;
+}
+.crud .rows thead a:link,
+.crud .rows thead a:visited {
+    color: green;
+    text-decoration: none;
+}
+.crud .rows thead a:hover {
+    background-color: #ee7;
+    border-radius: 10px 10px 0 0;
+}
+.crud .rows a.details {
+    display: block;
+    width: 25px;
+    height: 25px;
+    background: url('magnifier.png') no-repeat center center;
+}
+.crud .rows td.btn {
+    width: 25px;
+    padding: 5px;
+}
+.crud .rows td.btn * {
+    margin: auto;
+}
+
+/* paginator widget styles */
+.crud .paginator {
+    width: 600px;
+    float: left;
+    text-align: center;
+}
+.crud .paginator .body {
+    display: inline;
+}
+.crud .paginator a {
+    display: inline-block;
+    background-color: #ccc;
+    width: 25px;
+    line-height: 25px;
+}
+.crud .paginator a:link,
+.crud .paginator a:visited {
+    text-decoration: none;
+    color: black;
+}
+.crud .paginator a:hover {
+    background-color: #eee;
+}
+.crud .paginator a.current {
+    background-color: #eea;
+}
+
+
+/* limit widget styles */
+.crud .limit input[type=text] {
+    width: 25px;
+}
+
+/* filter adder widget styles */
+.crud .add_filter input[type=text],
+.crud .add_filter select {
+    width: 60px;
+}
+.crud .add_filter select.op {
+    width: 35px;
+}
+.crud .add_filter .widgets {
+    display: inline;
+}
+.crud .add_filter .widgets>* {
+    width: 70px;
+}
+
+/* relations */
+.crud .relations {
+    margin-top: 20px;
+    font-size: 0.9em;
+}
+.crud .relations .rows,
+.crud .relations .paginator {
+    width: 500px;
+}
+
+/* styles for edit tables */
+.edit input[type=text],
+.edit input[type=file],
+.edit textarea {
+    width: 150px;
+}
+
+.edit.update input[type=text],
+.edit.update input[type=file],
+.edit.update textarea {
+    width: 300px;
+}
+.edit.update textarea {
+    height: 100px;
+}
+
+/* popup hide */
+div.popup {
+    display: none;
+}
+a.popup {
+    display: block;
+    margin-top: 20px;
+    text-align: center;
+    background-color: #eea;
+    text-decoration: none;
+    line-height: 40px;
+    border-radius: 10px;
+    font-weight: bold;
+}
+a.popup:link,
+a.popup:visited {
+    color: green;
+}
+a.popup:hover {
+    background-color: #eec;
+}
