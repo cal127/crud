@@ -27,7 +27,7 @@ class REST
 
         $page_count = $crud->getPageCount();
 
-        print json_encode(compact('rows', 'page_count'));
+        return json_encode(compact('rows', 'page_count'));
     }
 
 
@@ -41,7 +41,7 @@ class REST
         $crud = $_SESSION['CRUDPage']['crud'][$_POST['hash']];
         $id = $crud->update($props, $_POST['id']);
 
-        print json_encode($id);
+        return json_encode($id);
     }
 
 
@@ -62,7 +62,7 @@ class REST
         $crud->addToBaseFilter($id);
         $crud->resetFilters();
 
-        print json_encode($id);
+        return json_encode($id);
     }
 
 
@@ -72,6 +72,8 @@ class REST
 
         $crud = $_SESSION['CRUDPage']['crud'][$values['hash']];
         $crud->delete($values['id']);
+
+        return null;
     }
 
 
@@ -88,7 +90,7 @@ class REST
             $message = 'Backend error: ' . $e->getMessage();
         }
 
-        printf(
+        return sprintf(
             '<script type="text/javascript">window.top.window.%s(%s, "%s");'
                 . '</script>',
             $_POST['callback_name'],
