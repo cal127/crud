@@ -1,20 +1,36 @@
-$.fn.CRUD = function() {
+$.fn.CRUD = function(settings) {
     if (!this.attr('data')) { return; }
 
+    // Setup options
+    // Defaults
+    CRUD.settings = {
+        logsEnabled : false,
+        path        : "/3rd/crud",
+        get_url     : "/ajax/get/",
+        post_url    : "/ajax/post/",
+        put_url     : "/ajax/put/",
+        delete_url  : "/ajax/delete/",
+        upload_url  : "/ajax/upload/"
+    }
+
+    // Override defaults
+    for (var i in settings) {
+        CRUD.settings[i] = settings[i];
+    }
+
+    // Setup handlebars and helpers
     // TODO
     // This would be called twice if CRUD is called on more
     // than once in the same page. Implement a singleton-like solution
     CRUD.setupHandlebars();
     CRUD.setupHelpers();
 
-    ////////////////////////////////////////////////
-
+    // Fetch data from elem
     var data = eval('(' + this.attr('data') + ')');
     this.removeAttr('data');
     this.addClass('crud');
 
-    ////////////////////////////////////////////////
-
+    // Setup elements
     if (data.page_type == "list") {
         new CRUDList(this, data).render();
     } else if (data.page_type == "detail") {
@@ -26,9 +42,8 @@ $.fn.CRUD = function() {
         }
     }
 
-    ////////////////////////////////////////////////
-
-    CRUD.tuneInterface();
+    // Setup interface
+    CRUD.setupInterface();
 }
 
 
@@ -38,8 +53,6 @@ function CRUD(container, options)
     this.options = options;
 }
 
-
-CRUD.logsEnabled = true;
 
 CRUD.prototype.render = function()
 {
@@ -144,11 +157,11 @@ CRUDList.prototype.setupEvents = function()
 
         var form = this;
 
-        $('#ajax_loader').show();
+        CRUD.ajax_load_img.show();
 
         $.ajax({
             type: "POST",
-            url: "/ajax/put/",
+            url: CRUD.settings.put_url,
             data: {
                 hash:  crudlist.hash,
                 props: CRUD.fixMultipleCheckbox($(this).serializeArray())
@@ -179,14 +192,14 @@ CRUDList.prototype.setupEvents = function()
                     alert('Done!');
                 }
 
-                $('#ajax_loader').hide();
+                CRUD.ajax_load_img.hide();
                 $.fancybox.close();
             },
             error: function(jqxhr, status, error) {
-                $('#ajax_loader').hide();
+                CRUD.ajax_load_img.hide();
                 $.fancybox.close();
                 alert('Create error!');
-                if (CRUD.logsEnabled) {
+                if (CRUD.settings.logsEnabled) {
                     console.log(jqxhr);
                     console.log(status);
                     console.log(error);
@@ -220,7 +233,7 @@ CRUDList.prototype.updateRows = function(postUpdate)
 
     $.ajax({
         type: "GET",
-        url: "/ajax/get/",
+        url: CRUD.settings.get_url,
         data: {
             hash:    this.hash,
             order:   this.order,
@@ -239,7 +252,7 @@ CRUDList.prototype.updateRows = function(postUpdate)
         },
         error: function(jqxhr, status, error) {
             alert('Read error!');
-            if (CRUD.logsEnabled) {
+            if (CRUD.settings.logsEnabled) {
                 console.log(jqxhr.responseText);
                 console.log(status);
                 console.log(error);
@@ -279,7 +292,7 @@ CRUDList.prototype.deleteRow = function(id, row_elem)
 {
     $.ajax({
         type: "GET",
-        url: "/ajax/delete/",
+        url: CRUD.settings.delete_url,
         data: {
             hash: this.hash,
             id:   id,
@@ -293,7 +306,7 @@ CRUDList.prototype.deleteRow = function(id, row_elem)
         },
         error: function(jqxhr, status, error) {
             alert('Delete error!');
-            if (CRUD.logsEnabled) {
+            if (CRUD.settings.logsEnabled) {
                 console.log(status);
                 console.log(error);
             }
@@ -351,11 +364,11 @@ CRUDDetail.prototype.setupEvents = function()
     this.container.find('.update form').submit(function(e) {
         e.preventDefault();
 
-        $('#ajax_loader').show();
+        CRUD.ajax_load_img.show();
 
         $.ajax({
             type: "POST",
-            url: "/ajax/post/",
+            url: CRUD.settings.post_url,
             data: {
                 hash:   cruddetail.hash,
                 id:     cruddetail.id,
@@ -364,12 +377,12 @@ CRUDDetail.prototype.setupEvents = function()
             dataType: "json",
             success: function(data) {
                 alert('Done!');
-                $('#ajax_loader').hide();
+                CRUD.ajax_load_img.hide();
             },
             error: function(jqxhr, status, error) {
-                $('#ajax_loader').hide();
+                CRUD.ajax_load_img.hide();
                 alert('Update error!');
-                if (CRUD.logsEnabled) {;
+                if (CRUD.settings.logsEnabled) {;
                     console.log(status);
                     console.log(error);
                 }
@@ -401,7 +414,7 @@ CRUD.upload = function(form, id, crud_hash, callback)
                 .attr('enctype', 'multipart/form-data')
                 .attr('target', 'tmp_iframe')
                 .attr('method', 'post')
-                .attr('action', '/ajax/upload')
+                .attr('action', CRUD.settings.upload_url)
                 .append('<div class="helper" />')
                 .append('<div id="uploading_txt">Uploading...</div>')
                 .append('<input type="hidden" name="id" value="' + id + '" />')
@@ -457,7 +470,7 @@ CRUD.fixMultipleCheckbox = function(arr)
 }
 
 
-CRUD.tuneInterface = function()
+CRUD.setupInterface = function()
 {
     // tabs
     $('.crud .relations.tabs').tabs();
@@ -485,11 +498,23 @@ CRUD.tuneInterface = function()
 
     $('.crud .add_filter select.by').change();
 
-    // add new popup
+    // new item popup
     $('a.popup').click(function() {
-        // $(this).next().show();
         $.fancybox.open($(this).next().show());
     });
+
+    // setup ajax loader image
+    CRUD.ajax_load_img =
+        $("<img src='" + CRUD.settings.path + "/ajax_loader.gif' />")
+            .appendTo("body")
+            .css({
+                position: "absolute",
+                left    : "47%",
+                top     : "400px",
+                zIndex  : "10000",
+                width   : "100px"
+            })
+            .hide();
 }
 
 
