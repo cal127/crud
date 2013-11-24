@@ -417,18 +417,31 @@ class CRUD
         $new_fields = array();
 
         foreach ($fields as $field) {
-            // Default field name
-            $name = $field;
+            if (is_array($field)) {
+                $title = $field[0];
+                $name = $field[1];
+            } else {
+                $title = null;
+                $name = $field;
+            }
+
+            // Determine virtual
+            $virtual = false;
+
+            if ($name[0] == '~') { // means virtual
+                $virtual = true;
+                $name = substr($name, 1);
+            }
 
             // Determine mods
             $read = $write = true;
 
             if ($name[0] == '[') { // means if readonly
                 $write = false;
-                $name = substr($field, 1);
-            } elseif ($field[0] == '+') { // means if writeonly
+                $name = substr($name, 1);
+            } elseif ($name[0] == '+') { // means if writeonly
                 $read = false;
-                $name = substr($field, 1);
+                $name = substr($name, 1);
             }
 
             // Determine type
@@ -458,9 +471,25 @@ class CRUD
                 $rel = null;
             }
 
+            // Determine virtual vol 2
+            if (
+                   $type == 'file'
+                || (
+                           $type == 'rel'
+                        && in_array(
+                            $rel['type'],
+                            array('has_one', 'has_many', 'has_many_through')
+                        )
+                   )
+            ) {
+                $virtual = true;
+            }
+
 
             // Generate Title
-            $title = self::generateTitle($name, $type, $rel);
+            $title = !empty($title)
+                   ? $title
+                   : self::generateTitle($name, $type, $rel);
 
 
             // Overwrite name if this is a rel/belongs_to type of field
@@ -476,7 +505,8 @@ class CRUD
                 'type',
                 'rel',
                 'read',
-                'write'
+                'write',
+                'virtual'
             );
         }
 
@@ -748,18 +778,7 @@ class CRUD
                 $filtered_props = array();
 
                 foreach ($props as $prop_name => $prop_value) {
-                    if (
-                        $fields[$prop_name]['type'] != 'file'
-                        &&
-                        !(
-                               $fields[$prop_name]['rel'] != 'rel'
-                            && in_array(
-                                    $fields[$prop_name]['rel']['type'],
-                                    array('has_one', 'has_many', 'has_many_through')
-                                )
-                         )
-                    )
-                    {
+                    if (!$fields[$prop_name]['virtual']) {
                         $filtered_props[$prop_name] = $prop_value;
                     }
                 }
