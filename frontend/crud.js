@@ -4,7 +4,7 @@ $.fn.CRUD = function(settings) {
     // Setup options
     // Defaults
     CRUD.settings = {
-        logsEnabled : false,
+        debug       : false,
         path        : "/3rd/crud",
         get_url     : "/ajax/get/",
         post_url    : "/ajax/post/",
@@ -101,6 +101,13 @@ CRUDList.prototype.setupEvents = function()
         e.preventDefault();
         crudlist.limit = $(this).find('input[name="limit"]').val();
         crudlist.page = 1;
+
+        if (CRUD.settings.debug) {
+            console.log('Changed limit!');
+            console.log('New Limit: ' + crudlist.limit);
+            console.log('New Page: ' + crudlist.page);
+        }
+
         crudlist.updateRows(function() { crudlist.setPaginator(); });
     });
 
@@ -126,6 +133,12 @@ CRUDList.prototype.setupEvents = function()
             crudlist.filters[by] = [op, val];
         }
 
+        if (CRUD.settings.debug) {
+            console.log('Added filter!');
+            console.log('Filters: ');
+            console.log(crudlist.filters);
+        }
+
         crudlist.updateFiltersTable();
         crudlist.updateRows();
     });
@@ -146,6 +159,12 @@ CRUDList.prototype.setupEvents = function()
         } else {
             crudlist.order[0][0] = new_order;
             crudlist.order[0][1] = 'asc';
+        }
+
+        if (CRUD.settings.debug) {
+            console.log('Changed order!');
+            console.log('New order: ');
+            console.log(crudlist.order);
         }
 
         crudlist.updateRows();
@@ -199,7 +218,7 @@ CRUDList.prototype.setupEvents = function()
                 CRUD.ajax_load_img.hide();
                 $.fancybox.close();
                 alert('Create error!');
-                if (CRUD.settings.logsEnabled) {
+                if (CRUD.settings.debug) {
                     console.log(jqxhr);
                     console.log(status);
                     console.log(error);
@@ -252,7 +271,7 @@ CRUDList.prototype.updateRows = function(postUpdate)
         },
         error: function(jqxhr, status, error) {
             alert('Read error!');
-            if (CRUD.settings.logsEnabled) {
+            if (CRUD.settings.debug) {
                 console.log(jqxhr.responseText);
                 console.log(status);
                 console.log(error);
@@ -306,7 +325,7 @@ CRUDList.prototype.deleteRow = function(id, row_elem)
         },
         error: function(jqxhr, status, error) {
             alert('Delete error!');
-            if (CRUD.settings.logsEnabled) {
+            if (CRUD.settings.debug) {
                 console.log(status);
                 console.log(error);
             }
@@ -382,7 +401,7 @@ CRUDDetail.prototype.setupEvents = function()
             error: function(jqxhr, status, error) {
                 CRUD.ajax_load_img.hide();
                 alert('Update error!');
-                if (CRUD.settings.logsEnabled) {;
+                if (CRUD.settings.debug) {;
                     console.log(status);
                     console.log(error);
                 }
