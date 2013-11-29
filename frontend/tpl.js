@@ -265,7 +265,7 @@ function program9(depth0,data) {
   buffer += "<div class=\"meta\">\n  <table class=\"filters\">\n    <thead>\n      <tr><th colspan=\"4\">Filters</th></tr>\n      <tr>\n        <td colspan=\"4\" class=\"add_filter\">\n          <form> \n            <select class=\"by\">\n              <option value=\"0\">Add</option>\n              ";
   stack1 = helpers.each.call(depth0, depth0.titles, {hash:{},inverse:self.noop,fn:self.program(1, program1, data),data:data});
   if(stack1 || stack1 === 0) { buffer += stack1; }
-  buffer += "\n            </select>\n\n            <select class=\"op\">\n              <!--<option>=</option>-->\n              <option>~</option>\n              <option>&lt;</option>\n              <option>&gt;</option>\n            </select>\n            \n            <div class=\"widgets\">\n              ";
+  buffer += "\n            </select>\n\n            <select class=\"op\">\n              <option>=</option>\n              <option>~</option>\n              <option>&lt;</option>\n              <option>&gt;</option>\n            </select>\n            \n            <div class=\"widgets\">\n              ";
   options = {hash:{},inverse:self.noop,fn:self.program(3, program3, data),data:data};
   stack2 = ((stack1 = helpers.eachWidget || depth0.eachWidget),stack1 ? stack1.call(depth0, depth0.widgets, 2, options) : helperMissing.call(depth0, "eachWidget", depth0.widgets, 2, options));
   if(stack2 || stack2 === 0) { buffer += stack2; }
