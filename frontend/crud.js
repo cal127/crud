@@ -140,8 +140,7 @@ CRUDList.prototype.setupEvents = function()
         }
 
         crudlist.updateFiltersTable();
-        crudlist.updateRows();
-        crudlist.setPaginator();
+        crudlist.updateRows(function() { crudlist.setPaginator(); });
     });
 
 
