@@ -138,9 +138,9 @@ class CRUD
 
 
     /**
-     * pending doc.
+     * Default values to use when saving
      */
-    private $save_filters = array();
+    private $defaults = array();
 
 
     // VARS THAT ARE GENERATED AUTOMATICALLY
@@ -319,10 +319,10 @@ class CRUD
     /**
      *
      */
-    public function setSaveFilters($props)
+    public function setDefaults($props)
     {
         if (!is_array($props)) { $props = array($props); }
-        $this->save_filters = $props;
+        $this->defaults = $props;
     }
 
 
@@ -420,6 +420,7 @@ class CRUD
             if (is_array($field)) {
                 $title = $field[0];
                 $name = $field[1];
+                $extra_filter = isset($field[2]) ? $field[2] : null;
             } else {
                 $title = null;
                 $name = $field;
@@ -506,7 +507,8 @@ class CRUD
                 'rel',
                 'read',
                 'write',
-                'virtual'
+                'virtual',
+                'extra_filter'
             );
         }
 
@@ -1028,10 +1030,18 @@ class CRUD
                             $field['rel']['related_model_name']
                         );
 
+                        // apply filters
                         foreach ($field['rel']['filters'] as $filter) {
                             list($filter_name, $filter_arg) = explode('=', $filter);
                             $filter_arg = explode(',', $filter_arg);
                             $orm = $orm->filter($filter_name, $filter_arg);
+                        }
+
+                        if (isset($field['extra_filter'])) {
+                            $orm = $orm->filter(
+                                $field['extra_filter'][0],
+                                $field['extra_filter'][1]
+                            );
                         }
 
                         try {
@@ -1103,7 +1113,7 @@ class CRUD
 
         $orm = Model::factory($this->short_model_name);
         $item = $id ? $orm->find_one($id) : $orm->create();
-        $item->set(array_merge($processed_props, $this->save_filters));
+        $item->set(array_merge($this->defaults, $processed_props));
         $item->save();
 
         $this->applyCallbacks(

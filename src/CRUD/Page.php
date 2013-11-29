@@ -10,13 +10,13 @@ class Page
         $fields,
         $details_url = null,
         $add_new = true,
-        $save_filters = null,
+        $defaults = null,
         $limit = 10
     )
     {
         $crud = new CRUD($orm, $fields);
         $crud->limit($limit);
-        if ($save_filters) { $crud->setSaveFilters($save_filters); }
+        if ($defaults) { $crud->setDefaults($defaults); }
 
         $_SESSION['CRUDPage']['crud'][$crud->getHash()] = $crud;
 
@@ -66,19 +66,23 @@ class Page
             $main_model_name = $main_crud->getModelName();
 
             foreach ($relations as $relator_mtd => $settings) {
-                list($fields, $details_url, $add_new)
-                    = array_merge($settings, array(null, null));
+                list($fields, $details_url, $add_new, $defaults, $limit)
+                    = array_merge($settings, array(null, null, null, null));
 
-                if (is_null($add_new)) { $add_new = true; } // default value
+                // set default values
+                if (is_null($add_new)) { $add_new = true; }
+                if (is_null($defaults)) { $defaults = array(); }
 
 
                 $crud = new CRUD($main_model->$relator_mtd(), $fields);
                 $crud->limit($relations_limit);
 
-                // save filter
+                // set defaults
                 $rel_details = CRUD::parseRelationDetails($relator_mtd . '.', $main_model_name);
                 $key_name = $rel_details['key1'];
-                $crud->setSaveFilters(array($key_name => $id));
+                $crud->setDefaults(
+                    array_merge($defaults, array($key_name => $id))
+                );
 
 
                 $_SESSION['CRUDPage']['crud'][$crud->getHash()] = $crud;
