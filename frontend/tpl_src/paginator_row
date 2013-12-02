@@ -1,0 +1,3 @@
+{{#times page_count}}
+<a href="#{{@index}}">{{@index}}</a>
+{{/times}}

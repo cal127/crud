@@ -1,0 +1,14 @@
+<span name="{{name}}">
+  <input type="radio" name="{{name}}" value="0"
+   {{#unless value}}checked="checked"{{/unless}}
+   {{#if readonly_active}}{{#unless write}}disabled="disabled"{{/unless}}{{/if}}
+  >
+  No
+</span>
+<span name="{{name}}">
+  <input type="radio" name="{{name}}" value="1"
+   {{#if value}}checked="checked"{{/if}}
+   {{#if readonly_active}}{{#unless write}}disabled="disabled"{{/unless}}{{/if}}
+  >
+  Yes
+</span>

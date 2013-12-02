@@ -1,0 +1,31 @@
+<div class="edit update">
+    <form>
+        <table>
+          {{#if main.writable}}
+            {{#eachWidget main.widgeted_data 1}}
+              <tr><th>{{title}}</th><td>{{@widget}}</td></tr>
+            {{/eachWidget}}
+          {{else}}
+            {{#each main.data}}
+              <tr><th>{{@key}}</th><td>{{this}}</td></tr>
+            {{/each}}
+          {{/if}}
+        </table>
+
+      {{#if main.writable}}<input type="submit" value="Update" />{{/if}}
+    </form>
+</div>
+
+{{#if rels}}
+<div class="relations tabs">
+  <ul>
+    {{#each rels}}
+    <li><a href="#rel_{{@key}}">{{rel_title}}</a></li>
+    {{/each}}
+  </ul>
+
+  {{#each rels}}
+  <div id="rel_{{@key}}"></div>
+  {{/each}}
+</div>
+{{/if}}

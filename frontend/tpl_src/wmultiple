@@ -1,0 +1,11 @@
+{{#each choices}}
+<div class="wmultiple">
+  <input type="checkbox" name="{{../name}}[]"
+    id="checkbox_{{../name}}_{{text}}" value="{{value}}" 
+    {{#if active}} checked="checked"{{/if}} 
+    {{#if readonly_active}}{{#unless write}}disabled="disabled"{{/unless}}{{/if}}
+  />
+
+  <label for="checkbox_{{../name}}_{{text}}">{{text}}</label>
+</div>
+{{/each}}

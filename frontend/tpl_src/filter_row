@@ -1,0 +1,10 @@
+{{#each filters}}
+  <tr>
+    <th>{{@key}}</th>
+
+    {{#each this}}
+    <td>{{this}}</td>
+    {{/each}}
+    <td><input type="button" class="delete" value="{{@key}}" /></td><!--delete filter-->
+  </tr>
+{{/each}}

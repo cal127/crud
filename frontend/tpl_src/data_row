@@ -1,0 +1,17 @@
+{{#each rows}}
+<tr>
+  {{#each this}}<td>{{this}}</td>{{/each}}
+
+  {{#if ../details_url}}
+    <td class="btn">
+      <a href="{{../../details_url}}/{{@key}}" class="details"></a>
+    </td>
+  {{/if}}
+
+  {{#if ../add_new}}
+  <td class="btn">
+    <input type="button" value="{{@key}}" class="delete" />
+  </td>
+  {{/if}}
+</tr>
+{{/each}}

@@ -1,0 +1,4 @@
+<input type="text" name="{{name}}" value="{{value}}"
+ {{#if readonly_active}}{{#unless write}}disabled="disabled"{{/unless}}{{/if}}
+ {{#unless readonly_active}}class="date"{{/unless}}
+/>

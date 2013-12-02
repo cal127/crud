@@ -1,0 +1,11 @@
+<select name="{{name}}"
+ {{#if readonly_active}}{{#unless write}}disabled="disabled"{{/unless}}{{/if}}
+>
+  <option value="0">&nbsp;</option>
+
+  {{#each choices}}
+    <option value="{{value}}"
+      {{#if active}} selected="selected"{{/if}} 
+    >{{text}}</option>
+  {{/each}}
+</select>

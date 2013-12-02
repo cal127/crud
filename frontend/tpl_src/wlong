@@ -1,0 +1,3 @@
+<textarea name="{{name}}"
+ {{#if readonly_active}}{{#unless write}}disabled="disabled"{{/unless}}{{/if}}
+>{{value}}</textarea>
