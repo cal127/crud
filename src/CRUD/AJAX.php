@@ -3,7 +3,7 @@
 namespace CRUD;
 
 
-class REST
+class AJAX
 {
     public static function create($params)
     {
