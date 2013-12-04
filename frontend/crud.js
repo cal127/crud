@@ -6,11 +6,11 @@ $.fn.CRUD = function(settings) {
     CRUD.settings = {
         debug       : false,
         path        : "/3rd/crud",
-        get_url     : "/ajax/get/",
-        post_url    : "/ajax/post/",
-        put_url     : "/ajax/put/",
-        delete_url  : "/ajax/delete/",
-        upload_url  : "/ajax/upload/"
+        create_url  : "/crud/create",
+        read_url    : "/crud/read",
+        update_url  : "/crud/update",
+        delete_url  : "/crud/delete",
+        upload_url  : "/crud/upload"
     }
 
     // Override defaults
@@ -180,7 +180,7 @@ CRUDList.prototype.setupEvents = function()
 
         $.ajax({
             type: "POST",
-            url: CRUD.settings.put_url,
+            url: CRUD.settings.create_url,
             data: {
                 hash:  crudlist.hash,
                 props: CRUD.fixMultipleCheckbox($(this).serializeArray())
@@ -251,8 +251,8 @@ CRUDList.prototype.updateRows = function(postUpdate)
     var crudlist = this;
 
     $.ajax({
-        type: "GET",
-        url: CRUD.settings.get_url,
+        type: "POST",
+        url: CRUD.settings.read_url,
         data: {
             hash:    this.hash,
             order:   this.order,
@@ -310,7 +310,7 @@ CRUDList.prototype.setRows = function(rows)
 CRUDList.prototype.deleteRow = function(id, row_elem)
 {
     $.ajax({
-        type: "GET",
+        type: "POST",
         url: CRUD.settings.delete_url,
         data: {
             hash: this.hash,
@@ -387,7 +387,7 @@ CRUDDetail.prototype.setupEvents = function()
 
         $.ajax({
             type: "POST",
-            url: CRUD.settings.post_url,
+            url: CRUD.settings.update_url,
             data: {
                 hash:   cruddetail.hash,
                 id:     cruddetail.id,
