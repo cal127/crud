@@ -5,7 +5,7 @@ namespace CRUD;
 
 class AJAX
 {
-    public static function create($params)
+    public static function create()
     {
         if (!isset($_POST['props']) || !count($_POST['props'])) {
             $props = array();
@@ -50,7 +50,7 @@ class AJAX
     }
 
 
-    public static function update($params)
+    public static function update()
     {
         $props = array_combine(
             array_map(function($x) { return $x['name']; }, $_POST['props']),
@@ -64,7 +64,7 @@ class AJAX
     }
 
 
-    public static function delete($params)
+    public static function delete()
     {
         $crud = $_SESSION['CRUDPage']['crud'][$_POST['hash']];
         $crud->delete($_POST['id']);
@@ -73,7 +73,7 @@ class AJAX
     }
 
 
-    public static function upload($params)
+    public static function upload()
     {
         $crud = $_SESSION['CRUDPage']['crud'][$_POST['hash']];
 
