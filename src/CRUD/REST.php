@@ -5,47 +5,7 @@ namespace CRUD;
 
 class REST
 {
-    public static function get($params)
-    {
-        parse_str(substr($params, 1), $values);
-
-        $crud = $_SESSION['CRUDPage']['crud'][$values['hash']];
-
-        $crud->limit($values['limit'], $values['page']);
-
-        $crud->resetFilters();
-
-        if (isset($values['filters'])) {
-            $crud->filter($values['filters']);
-        }
-
-        if (isset($values['order'])) {
-            $crud->order($values['order']);
-        }
-
-        $rows = $crud->getRows();
-
-        $page_count = $crud->getPageCount();
-
-        return json_encode(compact('rows', 'page_count'));
-    }
-
-
-    public static function post($params)
-    {
-        $props = array_combine(
-            array_map(function($x) { return $x['name']; }, $_POST['props']),
-            array_map(function($x) { return $x['value']; }, $_POST['props'])
-        );
-
-        $crud = $_SESSION['CRUDPage']['crud'][$_POST['hash']];
-        $id = $crud->update($props, $_POST['id']);
-
-        return json_encode($id);
-    }
-
-
-    public static function put($params)
+    public static function create($params)
     {
         if (!isset($_POST['props']) || !count($_POST['props'])) {
             $props = array();
@@ -66,12 +26,48 @@ class REST
     }
 
 
+    public static function read()
+    {
+        $crud = $_SESSION['CRUDPage']['crud'][$_POST['hash']];
+
+        $crud->limit($_POST['limit'], $_POST['page']);
+
+        $crud->resetFilters();
+
+        if (isset($_POST['filters'])) {
+            $crud->filter($_POST['filters']);
+        }
+
+        if (isset($_POST['order'])) {
+            $crud->order($_POST['order']);
+        }
+
+        $rows = $crud->getRows();
+
+        $page_count = $crud->getPageCount();
+
+        return json_encode(compact('rows', 'page_count'));
+    }
+
+
+    public static function update($params)
+    {
+        $props = array_combine(
+            array_map(function($x) { return $x['name']; }, $_POST['props']),
+            array_map(function($x) { return $x['value']; }, $_POST['props'])
+        );
+
+        $crud = $_SESSION['CRUDPage']['crud'][$_POST['hash']];
+        $id = $crud->update($props, $_POST['id']);
+
+        return json_encode($id);
+    }
+
+
     public static function delete($params)
     {
-        parse_str(substr($params, 1), $values);
-
-        $crud = $_SESSION['CRUDPage']['crud'][$values['hash']];
-        $crud->delete($values['id']);
+        $crud = $_SESSION['CRUDPage']['crud'][$_POST['hash']];
+        $crud->delete($_POST['id']);
 
         return null;
     }
