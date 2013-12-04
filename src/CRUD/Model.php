@@ -163,4 +163,9 @@ class Model extends \Model
             ->where("{$join_table_name}.{$key_to_base_table}", $this->$base_table_id_column); ;
     }
     
+    public function __call($name, $arguments) {
+        $method = strtolower(preg_replace('/([a-z])([A-Z])/', '$1_$2', $name));
+        if (!method_exists(array($this, $method))) { return false; }
+        return call_user_func_array(array($this, $method), $arguments);
+    }
 }
