@@ -165,7 +165,7 @@ class Model extends \Model
     
     public function __call($name, $arguments) {
         $method = strtolower(preg_replace('/([a-z])([A-Z])/', '$1_$2', $name));
-        if (!method_exists(array($this, $method))) { return false; }
+        if (!method_exists($this, $method)) { return false; }
         return call_user_func_array(array($this, $method), $arguments);
     }
 }
