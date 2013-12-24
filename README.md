@@ -23,8 +23,9 @@ It is analogue to Codeigniter 1's Grocery CRUD and Django's Admin.
 - Fancybox
 
 ## Usage
-You can refer to the demo in the demo folder for usage.
-However, here are the most important points to keep in mind:
+Full documentation will be available soon. For now you can refer to the
+demo in the demo folder for usage. However, here are the most important
+points to keep in mind:
 
 - Use CRUD\Model instead of Paris' default \Model
   in all your code related with CRUD. (This includes model definitions)
@@ -40,7 +41,3 @@ However, here are the most important points to keep in mind:
   and from these pages call CRUD's get, post, put, delete and upload functions.
   (This may look awkward, but it is needed as CRUD's backend and frontend
   are fully separated.) Check out the demo.
-
-## Known Problems
-- Error reporting is crappy
-- Front-end may still be a bit buggy
