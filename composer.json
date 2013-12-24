@@ -1,5 +1,5 @@
 {
-    "name": "cal127/crud",
+    "name": "cal127/phpcrud",
     "type": "library",
     "description": "A non-scaffold CRUD generator built on top of Paris ORM.",
     "keywords": ["crud", "php", "paris"],
