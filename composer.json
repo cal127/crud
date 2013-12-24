@@ -1,5 +1,16 @@
 {
     "name": "cal127/crud",
+    "type": "library",
+    "description": "A non-scaffold CRUD generator built on top of Paris ORM.",
+    "keywords": ["crud", "php", "paris"],
+    "homepage": "http://github.com/cal127/phpcrud",
+    "authors": [
+        {
+            "name": "Ege Avunç",
+            "email": "egeavunc@gmail.com",
+            "role": "Developer"
+        }
+    ],
     "require": {
         "php": ">=5.3.0",
         "j4mie/paris": "1.4.*"
