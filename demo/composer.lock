@@ -1,0 +1,173 @@
+{
+    "_readme": [
+        "This file locks the dependencies of your project to a known state",
+        "Read more about it at http://getcomposer.org/doc/01-basic-usage.md#composer-lock-the-lock-file"
+    ],
+    "hash": "ea8be2c4cacfb4468365e97aabbc22a5",
+    "packages": [
+        {
+            "name": "cal127/crud",
+            "version": "v0.4.2",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/cal127/crud.git",
+                "reference": "72a78b853e45026f6a531b10e09c707b761324f3"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/cal127/crud/zipball/72a78b853e45026f6a531b10e09c707b761324f3",
+                "reference": "72a78b853e45026f6a531b10e09c707b761324f3",
+                "shasum": ""
+            },
+            "require": {
+                "j4mie/paris": "1.4.*",
+                "php": ">=5.3.0"
+            },
+            "type": "library",
+            "autoload": {
+                "psr-0": {
+                    "CRUD": "src/"
+                }
+            },
+            "support": {
+                "source": "https://github.com/cal127/crud/tree/v0.4.2",
+                "issues": "https://github.com/cal127/crud/issues"
+            },
+            "time": "2013-12-04 09:48:38"
+        },
+        {
+            "name": "j4mie/idiorm",
+            "version": "v1.4.0",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/j4mie/idiorm.git",
+                "reference": "3be516b440734811b58bb9d0b458a4109b49af71"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/j4mie/idiorm/zipball/3be516b440734811b58bb9d0b458a4109b49af71",
+                "reference": "3be516b440734811b58bb9d0b458a4109b49af71",
+                "shasum": ""
+            },
+            "require": {
+                "php": ">=5.2.0"
+            },
+            "type": "library",
+            "autoload": {
+                "classmap": [
+                    "idiorm.php"
+                ]
+            },
+            "notification-url": "https://packagist.org/downloads/",
+            "license": [
+                "BSD-2-Clause",
+                "BSD-3-Clause",
+                "BSD-4-Clause"
+            ],
+            "authors": [
+                {
+                    "name": "Simon Holywell",
+                    "email": "treffynnon@php.net",
+                    "homepage": "http://simonholywell.com",
+                    "role": "Maintainer"
+                },
+                {
+                    "name": "Jamie Matthews",
+                    "email": "jamie.matthews@gmail.com",
+                    "homepage": "http://j4mie.org",
+                    "role": "Developer"
+                },
+                {
+                    "name": "Durham Hale",
+                    "email": "me@durhamhale.com",
+                    "homepage": "http://durhamhale.com",
+                    "role": "Maintainer"
+                }
+            ],
+            "description": "A lightweight nearly-zero-configuration object-relational mapper and fluent query builder for PHP5",
+            "homepage": "http://j4mie.github.com/idiormandparis",
+            "keywords": [
+                "idiorm",
+                "orm",
+                "query builder"
+            ],
+            "time": "2013-09-05 09:01:18"
+        },
+        {
+            "name": "j4mie/paris",
+            "version": "v1.4.1",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/j4mie/paris.git",
+                "reference": "0932304b76dccb5eb07dc563009d0b5010865c3c"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/j4mie/paris/zipball/0932304b76dccb5eb07dc563009d0b5010865c3c",
+                "reference": "0932304b76dccb5eb07dc563009d0b5010865c3c",
+                "shasum": ""
+            },
+            "require": {
+                "j4mie/idiorm": "1.4.*",
+                "php": ">=5.2.0"
+            },
+            "type": "library",
+            "autoload": {
+                "classmap": [
+                    "paris.php"
+                ]
+            },
+            "notification-url": "https://packagist.org/downloads/",
+            "license": [
+                "BSD-2-Clause",
+                "BSD-3-Clause",
+                "BSD-4-Clause"
+            ],
+            "authors": [
+                {
+                    "name": "Simon Holywell",
+                    "email": "treffynnon@php.net",
+                    "homepage": "http://simonholywell.com",
+                    "role": "Maintainer"
+                },
+                {
+                    "name": "Jamie Matthews",
+                    "email": "jamie.matthews@gmail.com",
+                    "homepage": "http://j4mie.org",
+                    "role": "Developer"
+                },
+                {
+                    "name": "Durham Hale",
+                    "email": "me@durhamhale.com",
+                    "homepage": "http://durhamhale.com",
+                    "role": "Maintainer"
+                }
+            ],
+            "description": "A lightweight Active Record implementation for PHP5, built on top of Idiorm",
+            "homepage": "http://j4mie.github.com/idiormandparis",
+            "keywords": [
+                "Active Record",
+                "model",
+                "orm",
+                "paris"
+            ],
+            "time": "2013-09-05 11:15:53"
+        }
+    ],
+    "packages-dev": [
+
+    ],
+    "aliases": [
+
+    ],
+    "minimum-stability": "stable",
+    "stability-flags": [
+
+    ],
+    "platform": [
+
+    ],
+    "platform-dev": [
+
+    ]
+}
