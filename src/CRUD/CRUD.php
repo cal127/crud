@@ -225,12 +225,6 @@ class CRUD
 
 
     /**
-     * File upload dir for file fields.
-     */
-    private static $upload_dir;
-
-
-    /**
      * global date callbacks
      * two callbacks in an array, write & read, for conversion between db & ui
      */
@@ -323,15 +317,6 @@ class CRUD
     {
         if (!is_array($props)) { $props = array($props); }
         $this->defaults = $props;
-    }
-
-
-    /**
-     * File upload dir. Always ending with slash
-     */
-    public static function setUploadDir($upload_dir)
-    {
-        self::$upload_dir = rtrim('/', $upload_dir) . '/';
     }
 
 
@@ -693,27 +678,6 @@ class CRUD
             );
         }
 
-        // File callback ///////////////////////////////////////////////////////
-        self::addCallback(
-            null,
-            'post_save',
-            function($obj, $props, $fields) {
-                foreach ($props as $prop_name => $prop_value) {
-                    if ($fields[$prop_name]['type'] != 'file') { continue; }
-
-                    $ext = pathinfo(
-                        $_FILES['props']['name']['file'],
-                        PATHINFO_EXTENSION
-                    );
-
-                    move_uploaded_file(
-                        $_FILES['props']['tmp_name']['file'],
-                        self::$upload_dir . $obj->id . $ext
-                    );
-                }
-            }
-        );
-
         // Has-one callback ////////////////////////////////////////////////////
         self::addCallback(
             null,
@@ -833,18 +797,18 @@ class CRUD
 
     public function limit($limit, $page = 1)
     {
+        if (!is_numeric($limit) || $limit < 1) {
+            throw new Exception(
+                __METHOD__ . '(): Limit must be a number greater than 0!'
+            );
+        }
+
         $offset = ($page - 1) * $limit; 
 
         // calculate page count ////////////////////////////////////////////////
         $copy = clone $this->orm;
-
-        try {
-            $this->page_count = ceil($copy->count() / $limit);
-
-            if (!$this->page_count) { throw new Exception(); }
-        } catch (Exception $e) {
-            $this->page_count = 1;
-        }
+        $page_count = ceil($copy->count() / $limit);
+        $this->page_count = $page_count ? $page_count : 1;
 
         ////////////////////////////////////////////////////////////////////////
 
@@ -907,21 +871,22 @@ class CRUD
                     case 'belongs_to':
                     case 'has_one':
                         if ($raw) {
-                            $val = $field['rel']['type'] == 'belongs_to'
-                                 ? $row->{$field['rel']['key1']}
-                                 : $row
-                                    ->{$field['rel']['relator_mtd']}()
-                                    ->id;
-
+                            if ($field['rel']['type'] == 'belongs_to') {
+                                $val = $row->{$field['rel']['key1']};
+                            } else {
+                                if ($rel_obj = $row->{$field['rel']['relator_mtd']}()) {
+                                    $val = $rel_obj->id;
+                                } else {
+                                    $val = null;
+                                }
+                            }
                             break;
                         }
 
-                        try {
-                          $val
-                            = $row
-                              ->{$field['rel']['relator_mtd']}()
-                              ->{$field['rel']['related_model_field']};
-                        } catch (Exception $e) {
+                        if (
+                            !($rel_obj = $row->{$field['rel']['relator_mtd']}())
+                            || !($val = $rel_obj->{$field['rel']['related_model_field']})
+                        ) {
                             $val = null;
                         }
 
@@ -930,12 +895,9 @@ class CRUD
 
                     case 'has_many':
                     case 'has_many_through':
-                        try {
-                            $all_related_values
-                              = $row
-                                ->{$field['rel']['relator_mtd']}()
-                                ->find_array();
-                        } catch (Exception $e) {
+                        if ($rel_obj = $row->{$field['rel']['relator_mtd']}()) {
+                            $all_related_values = $rel_obj->find_array();
+                        } else {
                             $val = null;
                             break;
                         }
@@ -1044,36 +1006,32 @@ class CRUD
                             );
                         }
 
-                        try {
-                            $orm
-                                ->select_many(
-                                    array('value' => 'id'),
-                                    array(
-                                      'text' => $field['rel']['related_model_field']
-                                    )
-                                );
+                        $orm
+                            ->select_many(
+                                array('value' => 'id'),
+                                array(
+                                  'text' => $field['rel']['related_model_field']
+                                )
+                            );
 
-                            if (!isset($values[$field['name']])) {
-                                $items = $orm->find_array();
-                            } else {
-                                $val = $values[$field['name']]; // alias
+                        if (!isset($values[$field['name']])) {
+                            $items = $orm->find_array();
+                        } else {
+                            $val = $values[$field['name']]; // alias
 
-                                $cond = $field['rel']['type'] == 'belongs_to'
-                                      ? 'id = ' .  $val
-                                      : 'id IN (' . implode(', ', $val) . ')';
+                            $cond = $field['rel']['type'] == 'belongs_to'
+                                  ? 'id = ' .  $val
+                                  : 'id IN (' . implode(', ', $val) . ')';
 
-                                $orm->select_expr($cond, 'active');
+                            $orm->select_expr($cond, 'active');
 
-                                $items = $orm->find_array();
+                            $items = $orm->find_array();
 
-                                // ugly fix
-                                $items = array_map(
-                                    function($i) { $i['active'] = (bool)$i['active']; return $i; },
-                                    $items
-                                );
-                            }
-                        } catch (Exception $e) {
-                            $items = array();
+                            // ugly fix
+                            $items = array_map(
+                                function($i) { $i['active'] = (bool)$i['active']; return $i; },
+                                $items
+                            );
                         }
                         ////////////////////////////////////////////////////////
 
@@ -1150,26 +1108,24 @@ class CRUD
             $result = array_shift($callback_args);
         }
 
-        try {
-            $callbacks = $this->getCallbacks();
+        $callbacks = $this->getCallbacks();
 
-            foreach ($callback_types as $ct) {
-                if (!isset($callbacks[$ct])) { continue; }
+        foreach ($callback_types as $ct) {
+            if (!isset($callbacks[$ct])) { continue; }
 
-                foreach ($callbacks[$ct] as $f) {
-                    if (is_callable($f)) {
-                        if ($chain) {
-                            $result = call_user_func_array(
-                                $f,
-                                array_merge(array($result), $callback_args)
-                            );
-                        } else {
-                            call_user_func_array($f, $callback_args);
-                        }
+            foreach ($callbacks[$ct] as $f) {
+                if (is_callable($f)) {
+                    if ($chain) {
+                        $result = call_user_func_array(
+                            $f,
+                            array_merge(array($result), $callback_args)
+                        );
+                    } else {
+                        call_user_func_array($f, $callback_args);
                     }
                 }
             }
-        } catch (Exception $e) { throw $e; }
+        }
 
         if ($chain) { return $result; }
     }
