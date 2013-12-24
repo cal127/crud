@@ -34,7 +34,6 @@ function program4(depth0,data,depth2) {
   var buffer = "", stack1;
   buffer += "\n    <td class=\"btn\">\n      <a href=\""
     + escapeExpression(((stack1 = depth2.details_url),typeof stack1 === functionType ? stack1.apply(depth0) : stack1))
-    + "/"
     + escapeExpression(((stack1 = ((stack1 = data),stack1 == null || stack1 === false ? stack1 : stack1.key)),typeof stack1 === functionType ? stack1.apply(depth0) : stack1))
     + "\" class=\"details\"></a>\n    </td>\n  ";
   return buffer;

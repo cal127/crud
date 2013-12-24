@@ -4,7 +4,7 @@
 
   {{#if ../details_url}}
     <td class="btn">
-      <a href="{{../../details_url}}/{{@key}}" class="details"></a>
+      <a href="{{../../details_url}}{{@key}}" class="details"></a>
     </td>
   {{/if}}
 
